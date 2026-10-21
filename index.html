@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tala Café: proyecto de ejemplo de Web media por Veltri Studio.">
+<title>Tala Café</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+/* Layout: página única de 5 secciones (Inicio, Carta, Galería, Nosotros, Contacto) con menú fijo. Verde bosque + mandarina sobre gris menta. */
+:root {
+  --bg: #E7EDE9;
+  --surface: #F6F8F6;
+  --ink: #12302A;
+  --muted: #4E665E;
+  --line: #C5D1CB;
+  --accent: #E8541A;
+  --on-accent: #FFFFFF;
+  --deep: #12302A;
+  --on-deep: #E7EDE9;
+  --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; }
+
+/* Barra de ejemplo */
+.demo-bar {
+  background: var(--deep);
+  color: var(--on-deep);
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 0.45rem 1rem;
+}
+
+/* Menú */
+.nav-bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.nav-bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.75rem; }
+.logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.logo span { color: var(--accent); }
+.menu { display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: none; }
+.menu::-webkit-scrollbar { display: none; }
+.menu a { padding: 0.45rem 0.85rem; border-radius: 999px; text-decoration: none; font-weight: 500; font-size: 0.9375rem; white-space: nowrap; }
+.menu a:hover { background: var(--surface); }
+@media (max-width: 640px) {
+  .nav-bar .wrap { flex-wrap: wrap; padding-bottom: 0.4rem; }
+  .menu { width: 100%; }
+}
+
+/* Inicio */
+.hero { padding-block: clamp(2.5rem, 7vw, 5.5rem); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+@media (max-width: 820px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+.hero h1 { font-size: clamp(2.75rem, 9vw, 6rem); line-height: 0.95; font-weight: 800; letter-spacing: -0.035em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lead { margin: 1.5rem 0 0; max-width: 30em; font-size: 1.1875rem; color: var(--muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; margin-top: 2rem; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.85rem 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover { background: #C9440F; }
+.link { font-weight: 700; text-underline-offset: 4px; }
+.hours {
+  background: var(--deep);
+  color: var(--on-deep);
+  border-radius: 28px;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  display: grid;
+  gap: 1rem;
+}
+.hours h3 { font-size: 1.5rem; font-weight: 600; }
+.hours dl { margin: 0; display: grid; gap: 0.6rem; }
+.hours dl div { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(231, 237, 233, 0.2); padding-top: 0.6rem; }
+.hours dt { opacity: 0.8; }
+.hours dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.hours .tag { margin: 0; font-size: 0.8125rem; letter-spacing: 0.1em; text-transform: uppercase; color: #F3A27F; font-weight: 700; }
+
+/* Secciones */
+.section { padding-block: clamp(3rem, 8vw, 5.5rem); }
+.section.alt { background: var(--surface); }
+.section-head { display: grid; gap: 0.5rem; margin-bottom: clamp(1.75rem, 4vw, 2.75rem); }
+.section-head p { margin: 0; max-width: 34em; color: var(--muted); }
+
+/* Carta */
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.chip {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--on-deep); }
+.items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(1.5rem, 4vw, 3.5rem); }
+@media (max-width: 760px) { .items { grid-template-columns: minmax(0, 1fr); } }
+.items li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.15rem 1rem; padding-block: 1.1rem; border-top: 1px solid var(--line); }
+.items li[hidden] { display: none; }
+.items h3 { font-size: 1.25rem; font-weight: 600; }
+.items .price { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.items p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.9875rem; }
+
+/* Galería */
+.gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+@media (max-width: 820px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile { margin: 0; border-radius: 20px; overflow: hidden; aspect-ratio: 1; position: relative; display: grid; place-items: center; }
+.tile.wide { grid-column: span 2; aspect-ratio: 2 / 1; }
+.tile svg { width: 62%; height: auto; max-height: 86%; }
+.tile.wide svg { width: auto; height: 82%; }
+.tile figcaption {
+  position: absolute; left: 0.75rem; bottom: 0.7rem;
+  font-size: 0.8125rem; font-weight: 700;
+  padding: 0.2rem 0.65rem; border-radius: 999px;
+  background: rgba(246, 248, 246, 0.92); color: var(--ink);
+}
+.t1 { background: #12302A; } .t2 { background: #E8541A; } .t3 { background: #F3C98B; }
+.t4 { background: #7FA394; } .t5 { background: #F6F8F6; border: 1px solid var(--line); } .t6 { background: #2F5A4C; }
+.note-photos { margin: 1rem 0 0; font-size: 0.875rem; color: var(--muted); }
+
+/* Nosotros */
+.about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 4.5rem); align-items: start; }
+@media (max-width: 820px) { .about { grid-template-columns: minmax(0, 1fr); } }
+.about p { margin: 0 0 1rem; color: var(--muted); max-width: 34em; }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.facts li { padding-block: 1.1rem; border-top: 1px solid var(--line); display: grid; gap: 0.15rem; }
+.facts strong { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; }
+.facts span { color: var(--muted); font-size: 0.9875rem; }
+
+/* Contacto */
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2rem, 6vw, 4.5rem); }
+@media (max-width: 820px) { .contact { grid-template-columns: minmax(0, 1fr); } }
+.info { display: grid; gap: 1.25rem; align-content: start; }
+.info p { margin: 0; }
+.info .k { display: block; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.15rem; }
+form { display: grid; gap: 1rem; background: var(--surface); border-radius: 24px; padding: clamp(1.25rem, 3.5vw, 2rem); border: 1px solid var(--line); }
+.field { display: grid; gap: 0.35rem; }
+label { font-weight: 700; font-size: 0.9375rem; }
+input, select, textarea {
+  font: inherit;
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+}
+input:focus, select:focus, textarea:focus { border-color: var(--ink); outline: none; box-shadow: 0 0 0 3px rgba(232, 84, 26, 0.35); }
+textarea { min-height: 7rem; resize: vertical; }
+.row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 520px) { .row { grid-template-columns: minmax(0, 1fr); } }
+.sent { margin: 0; padding: 0.9rem 1rem; border-radius: 12px; background: var(--deep); color: var(--on-deep); font-weight: 500; }
+.sent[hidden] { display: none; }
+
+footer { background: var(--deep); color: var(--on-deep); padding-block: 2rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; font-size: 0.9375rem; }
+footer p { margin: 0; opacity: 0.85; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+</head>
+<body>
+<div class="demo-bar">Proyecto de ejemplo de Web media, hecho por Veltri Studio. Tala Café es un negocio inventado.</div>
+
+<div class="nav-bar">
+  <div class="wrap">
+    <a class="logo" href="#inicio">tala<span>.</span></a>
+    <nav class="menu" aria-label="Principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#carta">Carta</a>
+      <a href="#galeria">Galería</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <section class="wrap hero" id="inicio">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Café de especialidad en Buenos Aires</p>
+        <h1>Café de <em>verdad</em>, todos los días.</h1>
+        <p class="lead">Tostamos en el local, molemos al momento y horneamos cada mañana. Pasá por un espresso o quedate a desayunar.</p>
+        <div class="cta-row">
+          <a class="btn" href="#carta">Ver la carta</a>
+          <a class="link" href="#contacto">Cómo llegar</a>
+        </div>
+      </div>
+      <aside class="hours" aria-label="Horarios">
+        <p class="tag">Abierto todos los días</p>
+        <h3>Horarios</h3>
+        <dl>
+          <div><dt>Lunes a viernes</dt><dd>7:30 a 19:00</dd></div>
+          <div><dt>Sábados</dt><dd>8:30 a 20:00</dd></div>
+          <div><dt>Domingos</dt><dd>9:00 a 15:00</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section alt" id="carta">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">La carta</p>
+        <h2>Lo que servimos</h2>
+        <p>Precios de ejemplo. Filtrá por categoría.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Categorías">
+        <button class="chip" type="button" data-cat="todo" aria-pressed="true">Todo</button>
+        <button class="chip" type="button" data-cat="cafe" aria-pressed="false">Café</button>
+        <button class="chip" type="button" data-cat="pasteleria" aria-pressed="false">Pastelería</button>
+        <button class="chip" type="button" data-cat="brunch" aria-pressed="false">Brunch</button>
+      </div>
+      <ul class="items" id="items">
+        <li data-cat="cafe"><h3>Espresso</h3><span class="price">$2.800</span><p>Doble, de granos de Colombia tostados en el local.</p></li>
+        <li data-cat="cafe"><h3>Flat white</h3><span class="price">$4.200</span><p>Doble espresso con leche texturizada.</p></li>
+        <li data-cat="cafe"><h3>Cold brew</h3><span class="price">$4.600</span><p>Infusión en frío durante 16 horas, con hielo.</p></li>
+        <li data-cat="cafe"><h3>Chocolate caliente</h3><span class="price">$4.800</span><p>Chocolate semiamargo derretido con leche.</p></li>
+        <li data-cat="pasteleria"><h3>Medialuna de manteca</h3><span class="price">$1.600</span><p>Horneada cada mañana. Se agota temprano.</p></li>
+        <li data-cat="pasteleria"><h3>Budín de limón</h3><span class="price">$3.500</span><p>Con glaseado de limón, porción grande.</p></li>
+        <li data-cat="pasteleria"><h3>Cookie de chocolate</h3><span class="price">$3.200</span><p>Con chips de chocolate y sal marina.</p></li>
+        <li data-cat="brunch"><h3>Tostado de jamón y queso</h3><span class="price">$7.900</span><p>Pan de masa madre, jamón cocido y queso fundido.</p></li>
+        <li data-cat="brunch"><h3>Tostada con palta</h3><span class="price">$8.400</span><p>Palta, huevo poché y semillas, sobre pan de masa madre.</p></li>
+        <li data-cat="brunch"><h3>Yogur con granola</h3><span class="price">$6.500</span><p>Yogur natural, granola casera y frutas de estación.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="galeria">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Galería</p>
+        <h2>Así se ve el local</h2>
+      </div>
+      <div class="gallery">
+        <figure class="tile wide t1">
+          <svg viewBox="0 0 240 120" role="img" aria-label="Ilustración de una taza de café">
+            <ellipse cx="120" cy="108" rx="78" ry="8" fill="#0A1F1B"/>
+            <path d="M52 40 h116 v28 a42 42 0 0 1 -42 42 h-32 a42 42 0 0 1 -42 -42 z" fill="#E7EDE9"/>
+            <path d="M168 50 h14 a16 16 0 0 1 0 32 h-18" fill="none" stroke="#E7EDE9" stroke-width="9"/>
+            <ellipse cx="110" cy="42" rx="58" ry="9" fill="#E8541A"/>
+          </svg>
+          <figcaption>Espresso</figcaption>
+        </figure>
+        <figure class="tile t2">
+          <svg viewBox="0 0 100 100" role="img" aria-label="Ilustración de una medialuna">
+            <path d="M12 66 C 16 30, 84 30, 88 66 C 72 52, 28 52, 12 66 Z" fill="#F3C98B"/>
+            <path d="M34 44 v10 M50 40 v12 M66 44 v10" stroke="#E8541A" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <figcaption>Medialunas</figcaption>
+        </figure>
+        <figure class="tile t3">
+          <svg viewBox="0 0 100 100" role="img" aria-label="Ilustración de un vaso de cold brew">
+            <path d="M30 20 h40 l-6 64 h-28 z" fill="#12302A"/>
+            <path d="M33 38 h34 l-3 40 h-28 z" fill="#E8541A" opacity="0.9"/>
+            <rect x="40" y="46" width="12" height="12" rx="2" fill="#F6F8F6" opacity="0.8"/>
+            <rect x="52" y="60" width="10" height="10" rx="2" fill="#F6F8F6" opacity="0.8"/>
+          </svg>
+          <figcaption>Cold brew</figcaption>
+        </figure>
+        <figure class="tile t4">
+          <svg viewBox="0 0 100 100" role="img" aria-label="Ilustración de granos de café">
+            <ellipse cx="38" cy="42" rx="20" ry="28" transform="rotate(-25 38 42)" fill="#12302A"/>
+            <path d="M28 66 C 40 48, 36 36, 46 18" fill="none" stroke="#7FA394" stroke-width="3"/>
+            <ellipse cx="66" cy="62" rx="18" ry="26" transform="rotate(30 66 62)" fill="#2F5A4C"/>
+            <path d="M78 42 C 66 56, 68 66, 56 82" fill="none" stroke="#7FA394" stroke-width="3"/>
+          </svg>
+          <figcaption>Granos</figcaption>
+        </figure>
+        <figure class="tile t5">
+          <svg viewBox="0 0 100 100" role="img" aria-label="Ilustración de una porción de budín">
+            <path d="M14 70 L 20 36 h60 l6 34 z" fill="#F3C98B"/>
+            <path d="M18 44 h64 l-2 12 h-60 z" fill="#F6F8F6" stroke="#C5D1CB" stroke-width="2"/>
+            <rect x="14" y="70" width="72" height="8" rx="3" fill="#12302A"/>
+          </svg>
+          <figcaption>Budín de limón</figcaption>
+        </figure>
+        <figure class="tile wide t6">
+          <svg viewBox="0 0 100 100" role="img" aria-label="Ilustración de una tostada con palta">
+            <rect x="14" y="26" width="72" height="50" rx="14" fill="#F3C98B"/>
+            <rect x="22" y="34" width="56" height="34" rx="10" fill="#7FA394"/>
+            <circle cx="50" cy="51" r="11" fill="#F6F8F6"/>
+            <circle cx="50" cy="51" r="5" fill="#E8541A"/>
+          </svg>
+          <figcaption>Tostada con palta</figcaption>
+        </figure>
+      </div>
+      <p class="note-photos">Ilustraciones de ejemplo. En una web real acá van las fotos del negocio.</p>
+    </div>
+  </section>
+
+  <section class="section alt" id="nosotros">
+    <div class="wrap about">
+      <div>
+        <p class="eyebrow">Nosotros</p>
+        <h2>Una cafetería de barrio</h2>
+        <div style="height:1.25rem"></div>
+        <p>Tala abrió con una idea simple: servir buen café sin vueltas. Elegimos granos de productores chicos, los tostamos en el mismo local y los preparamos al momento.</p>
+        <p>La pastelería sale del horno cada mañana y el brunch se arma con pan de masa madre. Hay mesas adentro, en la vereda y un rincón para trabajar con la compu.</p>
+      </div>
+      <ul class="facts">
+        <li><strong>Tostado propio</strong><span>Tostamos en pequeños lotes cada semana.</span></li>
+        <li><strong>Pastelería diaria</strong><span>Todo se hornea en el local, por la mañana.</span></li>
+        <li><strong>Con y sin TACC</strong><span>Opciones sin gluten y leche vegetal sin costo extra.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="contacto">
+    <div class="wrap contact">
+      <div class="info">
+        <div>
+          <p class="eyebrow">Contacto</p>
+          <h2>Pasá o escribinos</h2>
+        </div>
+        <p><span class="k">Dirección</span>Av. Ejemplo 1234, Buenos Aires</p>
+        <p><span class="k">WhatsApp</span>+54 11 0000 0000</p>
+        <p><span class="k">Reservas para grupos</span>Para 6 personas o más, escribinos con un día de anticipación.</p>
+      </div>
+      <form id="contact-form" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label for="email">Mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="tu@mail.com" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="motivo">Motivo</label>
+          <select id="motivo" name="motivo">
+            <option>Reserva de mesa</option>
+            <option>Pedido para eventos</option>
+            <option>Consulta general</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" placeholder="Contanos qué necesitás" required></textarea>
+        </div>
+        <button class="btn" type="submit">Enviar mensaje</button>
+        <p class="sent" id="sent" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Tala Café. Negocio de ejemplo.</p>
+    <p>Web media por Veltri Studio</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var chips = document.querySelectorAll(".chip");
+  var items = document.querySelectorAll("#items li");
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      var cat = c.getAttribute("data-cat");
+      chips.forEach(function (x) { x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+      items.forEach(function (li) { li.hidden = !(cat === "todo" || li.getAttribute("data-cat") === cat); });
+    });
+  });
+
+  var form = document.getElementById("contact-form");
+  var sent = document.getElementById("sent");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nombre = document.getElementById("nombre").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var mensaje = document.getElementById("mensaje").value.trim();
+    sent.hidden = false;
+    if (!nombre || !email || email.indexOf("@") < 1 || !mensaje) {
+      sent.textContent = "Completá nombre, mail y mensaje para enviar.";
+      return;
+    }
+    sent.textContent = "Es un formulario de ejemplo, así que este mensaje no se envió. En una web real, te llegaría al mail o al WhatsApp del negocio.";
+    form.reset();
+  });
+})();
+</script>
+</body>
+</html>
